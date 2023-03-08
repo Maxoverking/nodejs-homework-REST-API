@@ -1,12 +1,11 @@
 const express = require("express");
-// const { nanoid } = require("nanoid");
 const router = express.Router();
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  // updateContact,
+  updateContact,
 } = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
@@ -18,8 +17,8 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const getContactId = await getContactById(req.params);
-  if (getContactId.length === 1) {
+  const [getContactId] = await getContactById(req.params);
+  if (getContactId) {
     return res.status(200).json({
       message: getContactId,
       status: "success",
@@ -32,6 +31,8 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
+  // const { name, email, phone } = req.body;
+  // const addNewContact = await addContact(name, email, phone);
   const addNewContact = await addContact(req.body);
 
   res.status(201).json({
@@ -41,14 +42,15 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template put message" });
+  const putUpdateContact = await updateContact(req.params, req.body);
+  res.status(200).json({ message: putUpdateContact });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const deleteContactById = await removeContact(req.params);
-  if (deleteContactById !== -1) {
+  if (deleteContactById) {
     return res.status(200).json({
-      message: "Contact deleted",
+      message: "contact deleted",
       status: "success",
     });
   }
