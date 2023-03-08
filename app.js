@@ -1,13 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-// const {
-//   listContacts,
-//      getContactById,
-//     removeContact,
-//     addContact,
-//     updateContact,
-// } = require("./models/contacts");
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
