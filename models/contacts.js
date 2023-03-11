@@ -1,67 +1,29 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { updateFileOperation, tryCatchWrapper } = require("./helpers");
+
 // получаем полный путь к файлу
 const contactsPath = path.join(__dirname, "contacts.json");
 
-const updateFileOperation = async (addToContactFile) => {
-  const data = await listContacts();
+const listContacts = tryCatchWrapper(async () => {
+  const data = await fs.readFile(contactsPath, "utf-8");
+  return JSON.parse(data);
+});
 
-  const contactFile = data.filter(({ id }) => id !== addToContactFile.id);
-  const addNewContact = [addToContactFile, ...contactFile];
+const addContact = tryCatchWrapper(async ({ name, email, phone }) => {
+  const newContact = { id: Date.now().toString(), name, email, phone };
 
-  const convertToString = JSON.stringify(addNewContact);
-  await fs.writeFile(contactsPath, convertToString, "utf-8");
-};
+  updateFileOperation(await listContacts(), newContact, contactsPath);
+  return newContact;
+});
 
-const listContacts = async () => {
-  try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    console.log("🚀  error:", error);
-  }
-};
-
-const getContactById = async ({ contactId }) => {
-  try {
-    const data = await listContacts();
-    const contact = data.filter(({ id }) => id === contactId);
-    return contact;
-  } catch (error) {
-    console.log("🚀  error:", error);
-  }
-};
-
-const removeContact = async ({ contactId }) => {
-  try {
+const updateContact = tryCatchWrapper(
+  async ({ id }, { name, email, phone }) => {
     const data = await listContacts();
 
-    const contactIndex = data.some((item) => item.id === contactId);
-    const newContactsArray = data.filter(({ id }) => id !== contactId);
-
-    await fs.writeFile(contactsPath, JSON.stringify(newContactsArray), "utf-8");
-    return contactIndex;
-  } catch (error) {
-    console.log("🚀  error:", error);
-  }
-};
-
-const addContact = async ({ name, email, phone }) => {
-  try {
-    const newContact = { id: Date.now().toString(), name, email, phone };
-    updateFileOperation(newContact);
-    return newContact;
-  } catch (error) {
-    console.log("🚀  error:", error);
-  }
-};
-
-const updateContact = async ({ contactId }, { name, email, phone }) => {
-  try {
-    const data = await listContacts();
-    const changeContacts = data.reduce((acc, contact) => {
-      if (contact.id === contactId) {
-        acc.id = contactId;
+    const changingTheFields = data.reduce((acc, contact) => {
+      if (contact.id === id) {
+        acc.id = id;
         acc.name = name;
         acc.email = email;
         acc.phone = phone;
@@ -69,19 +31,30 @@ const updateContact = async ({ contactId }, { name, email, phone }) => {
       return acc;
     }, {});
 
-    updateFileOperation(changeContacts);
-    return changeContacts;
-  } catch (error) {
-    console.log("🚀  error:", error);
+    updateFileOperation(data, changingTheFields, contactsPath);
+    return changingTheFields;
   }
-};
+);
+
+const removeContact = tryCatchWrapper(async (deleteContact) => {
+  const data = await listContacts();
+  const newContactsArray = data.filter(({ id }) => id !== deleteContact.id);
+  await fs.writeFile(contactsPath, JSON.stringify(newContactsArray), "utf-8");
+});
 
 listContacts();
 
 module.exports = {
   listContacts,
-  getContactById,
   removeContact,
   addContact,
   updateContact,
 };
+
+// const getUserByID = async (req, res) => {
+//   const user = req.user;
+//   return res.status(200).json({
+//     message: user,
+//     status: "success",
+//   });
+// };
