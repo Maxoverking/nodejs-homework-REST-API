@@ -1,6 +1,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 const { updateFileOperation, tryCatchWrapper } = require("./helpers");
+
 // получаем полный путь к файлу
 const contactsPath = path.join(__dirname, "contacts.json");
 
@@ -54,11 +55,3 @@ module.exports = {
   addContact,
   updateContact,
 };
-
-// const getUserByID = async (req, res) => {
-//   const user = req.user;
-//   return res.status(200).json({
-//     message: user,
-//     status: "success",
-//   });
-// };
