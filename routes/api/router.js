@@ -8,7 +8,7 @@ const {
   postUser,
   putUser,
   deleteUser,
-} = require("../../controllers/usersReqRes");
+} = require("../../controllers/controllers");
 
 router.get("/", getAllUser);
 
