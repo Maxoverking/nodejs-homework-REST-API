@@ -23,17 +23,17 @@ const getUserByID = async (req, res) => {
 
 const postUser = async (req, res) => {
   const newContact = await addContact(req.body);
-  res.status(201).json({
-    message: newContact,
-    status: "success",
+  res.status(newContact ? 201 : 400).json({
+    message: newContact || "missing required name field",
+    status: newContact ? "success" : "error",
   });
 };
 
 const putUser = async (req, res) => {
   const changingTheFields = await updateContact(req.user, req.body);
-  res.status(201).json({
-    message: changingTheFields,
-    status: "success",
+  res.status(changingTheFields ? 200 : 400).json({
+    message: changingTheFields || "missing fields",
+    status: changingTheFields ? "success" : "error",
   });
 };
 
