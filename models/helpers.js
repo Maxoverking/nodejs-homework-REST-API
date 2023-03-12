@@ -10,16 +10,14 @@ const tryCatchWrapper =
     }
   };
 
-const updateFileOperation = tryCatchWrapper(
-  async (data, addToContactFile, contactsPath) => {
-    const contactFile = data.filter(({ id }) => id !== addToContactFile.id);
+const updateFileOperation = async (data, addToContactFile, contactsPath) => {
+  const contactFile = data.filter(({ id }) => id !== addToContactFile.id);
 
-    const addNewContact = [addToContactFile, ...contactFile];
+  const addNewContact = [addToContactFile, ...contactFile];
 
-    const convertToString = JSON.stringify(addNewContact);
-    await fs.writeFile(contactsPath, convertToString, "utf-8");
-  }
-);
+  const convertToString = JSON.stringify(addNewContact);
+  await fs.writeFile(contactsPath, convertToString, "utf-8");
+};
 
 module.exports = {
   updateFileOperation,
