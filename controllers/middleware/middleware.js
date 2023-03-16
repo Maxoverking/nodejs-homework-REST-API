@@ -24,7 +24,7 @@ const validUser = (req, res, next) => {
   next();
 };
 
-const checkContact = tryCatch(async (req, res, next) => {
+const checkUser = tryCatch(async (req, res, next) => {
   const { contactId } = req.params;
   const userExist = await MyModel.findOne({ _id: contactId }).select("-__v");
   if (!userExist) {
@@ -39,6 +39,6 @@ const checkContact = tryCatch(async (req, res, next) => {
 });
 
 module.exports = {
-  checkContact,
+  checkUser,
   validUser,
 };

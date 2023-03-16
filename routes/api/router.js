@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  checkContact,
+  checkUser,
   validUser,
 } = require("../../controllers/middleware/middleware");
 
@@ -16,18 +16,18 @@ const {
 
 router.get("/", getAllUser);
 
-router.get("/:contactId", checkContact, getUserByID);
+router.get("/:contactId", checkUser, getUserByID);
 
 router.post("/", validUser, postUser);
 
-router.put("/:contactId", checkContact, validUser, updateContact);
+router.put("/:contactId", checkUser, validUser, updateContact);
 
 router.patch("/:contactId/favorite", updateStatusContact);
 
-router.delete("/:contactId", checkContact, deleteUser);
+router.delete("/:contactId", checkUser, deleteUser);
 
 module.exports = router;
 
 // router.route.get("/", getAllUser).post("/", postUser);
-// router.use("/:contactId", checkContact);
+// router.use("/:contactId", checkUser);
 // router.route("/:contactId").get(getUserByID).put(putUser).delete(deleteUser);
