@@ -1,5 +1,5 @@
-const { tryCatch } = require("../models/helpers");
-const MyModel = require("./userSchema/userSchema");
+const { tryCatch } = require("../validation.helps/helpers");
+const MyModel = require("../models/userSchema");
 
 const getAllUser = tryCatch(async (req, res) => {
   const data = await MyModel.find().select("-__v");

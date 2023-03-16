@@ -1,6 +1,6 @@
-const MyModel = require("../controllers/userSchema/userSchema");
-const { validationUser } = require("../models/validation");
-const { tryCatch } = require("../models/helpers");
+const MyModel = require("../../models/userSchema");
+const { validationUser } = require("../../validation.helps/validation");
+const { tryCatch } = require("../../validation.helps/helpers");
 
 const validUser = (req, res, next) => {
   const { error, value } = validationUser(req.body);

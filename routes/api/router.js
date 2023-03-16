@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { checkContact, validUser } = require("../../middleware/middleware");
+const {
+  checkContact,
+  validUser,
+} = require("../../controllers/middleware/middleware");
 
 const {
   getAllUser,
