@@ -1,13 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { checkContact, validUser } = require("../../controllers/checkContacts");
+const { checkContact, validUser } = require("../../middleware/middleware");
 
 const {
   getAllUser,
   getUserByID,
   postUser,
-  putUser,
+  updateContact,
   deleteUser,
+  updateStatusContact,
 } = require("../../controllers/controllers");
 
 router.get("/", getAllUser);
@@ -16,7 +17,9 @@ router.get("/:contactId", checkContact, getUserByID);
 
 router.post("/", validUser, postUser);
 
-router.put("/:contactId", validUser, checkContact, putUser);
+router.put("/:contactId", checkContact, validUser, updateContact);
+
+router.patch("/:contactId/favorite", updateStatusContact);
 
 router.delete("/:contactId", checkContact, deleteUser);
 
