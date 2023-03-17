@@ -1,54 +1,75 @@
-const {
-  listContacts,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
+const { tryCatch } = require("../validation.helps/helpers");
+const MyModel = require("../models/userSchema");
 
-const getAllUser = async (req, res) => {
-  const getData = await listContacts();
+const getAllUser = tryCatch(async (req, res) => {
+  const data = await MyModel.find().select("-__v");
+
   res.status(200).json({
-    message: getData,
+    message: data,
+    status: "success",
+  });
+});
+
+const getUserByID = (req, res) => {
+  res.status(200).json({
+    message: req.user,
     status: "success",
   });
 };
 
-const getUserByID = async (req, res) => {
-  const user = req.user;
-  return res.status(200).json({
-    message: user,
+const postUser = tryCatch(async (req, res) => {
+  const newContact = await MyModel.create(req.body);
+  res.status(201).json({
+    message: newContact,
     status: "success",
   });
-};
+});
 
-const postUser = async (req, res) => {
-  const newContact = await addContact(req.body);
-  res.status(newContact ? 201 : 400).json({
-    message: newContact || "missing required name field",
-    status: newContact ? "success" : "error",
+const updateContact = tryCatch(async (req, res) => {
+  const { id } = req.params;
+  const putContact = await MyModel.findByIdAndUpdate({ _id: id }, req.body, {
+    new: true,
+  }).select("-__v");
+
+  res.status(200).json({
+    message: putContact,
+    status: "success",
   });
-};
+});
 
-const putUser = async (req, res) => {
-  const changingTheFields = await updateContact(req.user, req.body);
-  res.status(changingTheFields ? 200 : 400).json({
-    message: changingTheFields || "missing fields",
-    status: changingTheFields ? "success" : "error",
+const updateStatusContact = tryCatch(async (req, res) => {
+  const { id } = req.params;
+
+  if (!Object.keys(req.body).includes("favorite")) {
+    return res.status(400).json({
+      message: "Missing field favorite",
+      status: "error",
+    });
+  }
+  const updateStatus = await MyModel.findOneAndUpdate({ _id: id }, req.body, {
+    new: true,
+  }).select("-__v");
+
+  res.status(200).json({
+    message: updateStatus,
+    status: "success",
   });
-};
+});
 
-const deleteUser = async (req, res) => {
-  await removeContact(req.user);
+const deleteUser = tryCatch(async (req, res) => {
+  await MyModel.findByIdAndDelete({ _id: req.user.id });
+
   return res.status(200).json({
     message: "contact deleted",
     status: "success",
   });
-};
+});
 
 module.exports = {
   getAllUser,
   getUserByID,
   postUser,
-  putUser,
+  updateContact,
   deleteUser,
+  updateStatusContact,
 };

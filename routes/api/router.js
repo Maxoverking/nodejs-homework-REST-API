@@ -1,27 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const { checkContact, validUser } = require("../../controllers/checkContacts");
 
 const {
   getAllUser,
   getUserByID,
   postUser,
-  putUser,
+  updateContact,
   deleteUser,
+  updateStatusContact,
 } = require("../../controllers/controllers");
+const { checkUser } = require("../../middlewares/checkUser");
+const { validUser } = require("../../middlewares/validUser");
 
 router.get("/", getAllUser);
 
-router.get("/:contactId", checkContact, getUserByID);
+router.get("/:id", checkUser, getUserByID);
 
 router.post("/", validUser, postUser);
 
-router.put("/:contactId", validUser, checkContact, putUser);
+router.put("/:id", checkUser, validUser, updateContact);
 
-router.delete("/:contactId", checkContact, deleteUser);
+router.patch("/:id/favorite", checkUser, updateStatusContact);
+
+router.delete("/:id", checkUser, deleteUser);
 
 module.exports = router;
 
 // router.route.get("/", getAllUser).post("/", postUser);
-// router.use("/:contactId", checkContact);
-// router.route("/:contactId").get(getUserByID).put(putUser).delete(deleteUser);
+// router.use("/:id", checkUser);
+// router.route("/:id").get(getUserByID).put(putUser).delete(deleteUser);

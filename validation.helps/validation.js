@@ -6,13 +6,15 @@ const validationUser = (data) =>
 
     email: Joi.string().email({
       minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
+      tlds: { allow: ["com", "net", "ua"] },
     }),
 
     phone: Joi.string()
       .min(6)
       .max(12)
       .pattern(/^[0-9]+$/),
+
+    favorite: Joi.boolean(),
   }).validate(data);
 
 module.exports = {
