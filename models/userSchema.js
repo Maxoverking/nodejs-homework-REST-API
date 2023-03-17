@@ -4,11 +4,14 @@ const mySchema = new Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
+    trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
+    lowercase: true,
   },
   phone: {
     type: String,

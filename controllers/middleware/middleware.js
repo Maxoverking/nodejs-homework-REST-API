@@ -25,8 +25,8 @@ const validUser = (req, res, next) => {
 };
 
 const checkUser = tryCatch(async (req, res, next) => {
-  const { contactId } = req.params;
-  const userExist = await MyModel.findOne({ _id: contactId }).select("-__v");
+  const { id } = req.params;
+  const userExist = await MyModel.findOne({ _id: id }).select("-__v");
   if (!userExist) {
     return res.status(404).json({
       message: "Not found",

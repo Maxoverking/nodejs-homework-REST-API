@@ -16,18 +16,18 @@ const {
 
 router.get("/", getAllUser);
 
-router.get("/:contactId", checkUser, getUserByID);
+router.get("/:id", checkUser, getUserByID);
 
 router.post("/", validUser, postUser);
 
-router.put("/:contactId", checkUser, validUser, updateContact);
+router.put("/:id", checkUser, validUser, updateContact);
 
-router.patch("/:contactId/favorite", updateStatusContact);
+router.patch("/:id/favorite", checkUser, updateStatusContact);
 
-router.delete("/:contactId", checkUser, deleteUser);
+router.delete("/:id", checkUser, deleteUser);
 
 module.exports = router;
 
 // router.route.get("/", getAllUser).post("/", postUser);
-// router.use("/:contactId", checkUser);
-// router.route("/:contactId").get(getUserByID).put(putUser).delete(deleteUser);
+// router.use("/:id", checkUser);
+// router.route("/:id").get(getUserByID).put(putUser).delete(deleteUser);

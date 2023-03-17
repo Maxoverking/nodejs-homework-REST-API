@@ -26,12 +26,10 @@ const postUser = tryCatch(async (req, res) => {
 });
 
 const updateContact = tryCatch(async (req, res) => {
-  const { contactId } = req.params;
-  const putContact = await MyModel.findByIdAndUpdate(
-    { _id: contactId },
-    req.body,
-    { new: true }
-  );
+  const { id } = req.params;
+  const putContact = await MyModel.findByIdAndUpdate({ _id: id }, req.body, {
+    new: true,
+  }).select("-__v");
 
   res.status(200).json({
     message: putContact,
@@ -40,7 +38,7 @@ const updateContact = tryCatch(async (req, res) => {
 });
 
 const updateStatusContact = tryCatch(async (req, res) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
 
   if (!Object.keys(req.body).includes("favorite")) {
     return res.status(400).json({
@@ -48,13 +46,9 @@ const updateStatusContact = tryCatch(async (req, res) => {
       status: "error",
     });
   }
-  const updateStatus = await MyModel.findOneAndUpdate(
-    { _id: contactId },
-    req.body,
-    {
-      new: true,
-    }
-  );
+  const updateStatus = await MyModel.findOneAndUpdate({ _id: id }, req.body, {
+    new: true,
+  }).select("-__v");
 
   res.status(200).json({
     message: updateStatus,
@@ -63,7 +57,7 @@ const updateStatusContact = tryCatch(async (req, res) => {
 });
 
 const deleteUser = tryCatch(async (req, res) => {
-  await MyModel.deleteOne({ _id: req.user.id });
+  await MyModel.findByIdAndDelete({ _id: req.user.id });
 
   return res.status(200).json({
     message: "contact deleted",
