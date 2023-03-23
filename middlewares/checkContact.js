@@ -1,7 +1,7 @@
-const MyModel = require("../models/userSchema");
+const MyModel = require("../models/contactSchema");
 const { tryCatch } = require("../validation.helps/helpers");
 
-const checkUser = tryCatch(async (req, res, next) => {
+const checkContact = tryCatch(async (req, res, next) => {
   const { id } = req.params;
   const userExist = await MyModel.findOne({ _id: id }).select("-__v");
   if (!userExist) {
@@ -16,5 +16,5 @@ const checkUser = tryCatch(async (req, res, next) => {
 });
 
 module.exports = {
-  checkUser,
+  checkContact,
 };

@@ -4,7 +4,8 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const contactsRouter = require("./routes/api/router");
+const contactsRouter = require("./routes/api/contactsRouter");
+const usersRouter = require("./routes/api/usersRouter");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({
@@ -34,7 +36,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(422 || 500).json({
+  res.status(err.status || 500).json({
     message: err.message,
     status: "error",
   });

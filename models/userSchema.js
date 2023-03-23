@@ -1,29 +1,32 @@
 const { Schema, model } = require("mongoose");
+const userSubscription = require("../constants/userSubscription");
 
-const mySchema = new Schema({
-  name: {
+const userSchema = new Schema({
+  password: {
     type: String,
-    required: [true, "Set name for contact"],
-    trim: true,
+    required: [true, "Password is required"],
   },
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
     unique: true,
-    trim: true,
-    lowercase: true,
   },
-  phone: {
+  subscription: {
     type: String,
-    required: true,
+    enum: Object.values(userSubscription),
+    default: userSubscription.STARTER,
   },
-  favorite: {
-    type: Boolean,
-    default: false,
+  token: {
+    type: String,
+    default: null,
   },
-  // не показывать поле прописать select:false
+  // owner: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "user",
+  // },
 });
 
-const MyModel = model("contacts", mySchema);
+// console.log(userSchema.subscription.enum);
 
-module.exports = MyModel;
+const userModel = model("user", userSchema);
+module.exports = userModel;
