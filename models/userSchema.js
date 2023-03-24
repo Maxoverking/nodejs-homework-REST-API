@@ -20,13 +20,7 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
-  // owner: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "user",
-  // },
 });
-
-// console.log(userSchema.subscription.enum);
 
 const userModel = model("user", userSchema);
 module.exports = userModel;
