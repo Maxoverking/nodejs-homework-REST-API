@@ -3,6 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
+const { NOT_FOUND } = require("./constants/errorConstants");
 
 const contactsRouter = require("./routes/api/contactsRouter");
 const usersRouter = require("./routes/api/usersRouter");
@@ -30,7 +31,7 @@ app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({
-    message: "Not found",
+    message: NOT_FOUND,
     status: "error",
   });
 });

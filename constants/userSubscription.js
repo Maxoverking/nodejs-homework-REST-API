@@ -3,4 +3,5 @@ const userSubscription = {
   PRO: "pro",
   BUSINESS: "business",
 };
+
 module.exports = userSubscription;

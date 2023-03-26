@@ -10,22 +10,22 @@ const {
   updateStatusContact,
 } = require("../../controllers/contactsControllers");
 const { checkContact } = require("../../middlewares/checkContact");
+const { verifyToken } = require("../../middlewares/verifyToken");
 const { validContact } = require("../../middlewares/validContact");
+const { pagination } = require("../../middlewares/pagination");
 
-router.get("/", getAllUser);
+router.use(verifyToken);
 
-router.get("/:id", checkContact, getUserByID);
+router.get("/", pagination, getAllUser);
+
+router.patch("/:id/favorite", checkContact, updateStatusContact);
 
 router.post("/", validContact, postUser);
 
-router.put("/:id", checkContact, validContact, updateContact);
+router.get("/:id", checkContact, getUserByID);
 
-router.patch("/:id/favorite", checkContact, updateStatusContact);
+router.put("/:id", checkContact, validContact, updateContact);
 
 router.delete("/:id", checkContact, deleteUser);
 
 module.exports = router;
-
-// router.route.get("/", getAllUser).post("/", postUser);
-// router.use("/:id", checkContact);
-// router.route("/:id").get(getUserByID).put(putUser).delete(deleteUser);
