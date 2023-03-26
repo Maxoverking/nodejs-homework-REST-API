@@ -31,7 +31,7 @@ userSchema.pre("save", async function (next) {
 
   const salt = await bcrypt.genSalt(8);
   this.password = await bcrypt.hash(this.password, salt);
-  // const passwordIsValid = await bcrypt.compare(password, hashedPassword);
+
   next();
 });
 
