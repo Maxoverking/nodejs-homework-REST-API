@@ -1,9 +1,13 @@
+const { EMAIL_IN_USE } = require("../constants/errorConstants");
+
 const tryCatch = (callback) => {
   return (req, res, next) => {
     callback(req, res, next).catch((error) => {
       const myCustomError = new Error(
-        "Incorrect input or such a mail already exists"
+        // "Incorrect input or such a mail already exists"
+        EMAIL_IN_USE
       );
+      myCustomError.status = 409;
       myCustomError.cause = error; // сохранение оригинальной ошибки в свойстве "cause"
       next(myCustomError);
     });

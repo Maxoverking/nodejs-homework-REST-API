@@ -1,26 +1,13 @@
+const { INCORRECT_PASWRD_EMAIL } = require("../constants/errorConstants");
 const { validationUser } = require("../validation.helps/validation");
+const AppError = require("../validation.helps/myError");
 
 const validUser = (req, res, next) => {
   const { error, value } = validationUser(req.body);
-
   if (error) {
-    return res.status(404).json({
-      message: error.message,
-      status: "error",
-    });
-  }
-  const { name, email, phone } = value;
-
-  if (!name || !email || !phone) {
-    res.status(400).json({
-      message: "missing required name field",
-      status: "error",
-    });
-    return;
+    return next(new AppError(400, INCORRECT_PASWRD_EMAIL));
   }
   req = value;
   next();
 };
-module.exports = {
-  validUser,
-};
+module.exports = validUser;

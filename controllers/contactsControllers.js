@@ -1,11 +1,9 @@
 const { tryCatch } = require("../validation.helps/helpers");
-const MyModel = require("../models/userSchema");
+const MyModel = require("../models/contactSchema");
 
 const getAllUser = tryCatch(async (req, res) => {
-  const data = await MyModel.find().select("-__v");
-
   res.status(200).json({
-    message: data,
+    message: req.body,
     status: "success",
   });
 });
@@ -18,9 +16,13 @@ const getUserByID = (req, res) => {
 };
 
 const postUser = tryCatch(async (req, res) => {
-  const newContact = await MyModel.create(req.body);
+  const newContact = {
+    ...req.body,
+    owner: req.user.id,
+  };
+  const contact = await MyModel.create(newContact);
   res.status(201).json({
-    message: newContact,
+    message: contact,
     status: "success",
   });
 });
