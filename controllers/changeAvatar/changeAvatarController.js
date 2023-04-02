@@ -22,7 +22,6 @@ const changeAvatar = async (req, res, next) => {
 
     const resultUpload = path.join(fullPath, filename);
 
-    console.log("🚀  resultUpload:", resultUpload);
     await fs.rename(tmpFolder, resultUpload);
 
     const avatarURL = `/avatars/${filename}`;
