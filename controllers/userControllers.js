@@ -4,19 +4,26 @@ const AppError = require("../validation.helps/myError");
 const { tryCatch } = require("../validation.helps/helpers");
 const { createToken } = require("../validation.helps/singToken");
 const userSubscription = require("../constants/userSubscription");
+const uuid = require("uuid").v4;
+const { sendEmail } = require("../validation.helps/sendEmailVerifycationToken");
 
 const registerUser = tryCatch(async (req, res) => {
-  const user = await userModel.create(req.body);
+  const user = await userModel.create({
+    ...req.body,
+    verificationToken: uuid(),
+  });
+
   user.password = undefined;
 
-  await createToken(user);
+  const { email, subscription, verificationToken } = user;
 
-  const { email, subscription } = user;
+  await sendEmail(email, verificationToken);
 
   res.status(201).json({
     user: {
       email,
       subscription,
+      verificationToken,
     },
     status: "success",
   });
@@ -31,6 +38,9 @@ const loginUser = tryCatch(async (req, res, next) => {
 
   const passwotdIsValid = await user.checkPassword(password, user.password);
   if (!passwotdIsValid) return next(new AppError(401, EMAIL_PASSWORD_WRONG));
+
+  if (user.verify === false)
+    return next(new AppError(400, `Check ${email} and verifycate account`));
 
   user.password = undefined;
 

@@ -31,7 +31,18 @@ const validationUser = (data) =>
     password: Joi.string().regex(PASSWD_REGEX).required(),
   }).validate(data);
 
+const validResendMail = (data) =>
+  Joi.object({
+    email: Joi.string()
+      .email({
+        minDomainSegments: 2,
+        tlds: { allow: ["com", "net", "ua"] },
+      })
+      .required(),
+  }).validate(data);
+
 module.exports = {
   validationContact,
   validationUser,
+  validResendMail,
 };
