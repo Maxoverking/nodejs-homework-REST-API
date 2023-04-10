@@ -13,14 +13,7 @@ const sendEmail = async (email, verificationToken) => {
     <a href="http://localhost:3000/api/users/verify/${verificationToken}" target="_blank">Click varify email</a>
     </button>`,
   };
-  await sgMail
-    .send(msg)
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  await sgMail.send(msg);
 };
 module.exports = { sendEmail };
 
