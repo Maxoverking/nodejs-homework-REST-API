@@ -15,7 +15,6 @@ const {
   verificationUserToken,
 } = require("../../middlewares/verificationUserToken");
 const { resendMail } = require("../../middlewares/resendMail");
-// const { validResendMail } = require("../../validation.helps/validation");
 
 const router = express.Router();
 
